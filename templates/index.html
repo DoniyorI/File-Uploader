@@ -8,20 +8,65 @@
 </head>
 <body>
 
-{% macro tutorial_card(title, url, description, type, identifier) %}
-    
+    {% macro tutorial_card(title, url, description, type, identifier) %}
+    <div>
+        
+            <div class="card card-small" >
+                <div class="card-body">
+                    <h4 class="card-title">{{ title }}</h4>
+                    <p class="card-text">{{ description }}</p>
+                    <!-- <a href="{{ url }}" class="btn btn-primary" target="_blank">Open</a>   -->
+                    <button  
+                        onclick="event.stopPropagation(); window.location.href='/delete/{{ type }}/{{ identifier }}';" 
+                        class="">
+                        Delete
+                    </button>
+                </div>
+            </div>
+    </div>
+    {% endmacro %}
+
+    <!-- {% macro card(title, url, description, type, identifier) %}
+    <a href="{{ url }}" target="_blank" style="text-decoration: none; color: inherit;">
         <div class="card">
             <div class="card-body">
-                <button onclick="event.stopPropagation(); window.location.href='/delete/{{ type }}/{{ identifier }}';" class="btn btn-danger btn-sm float-right">X</button>
+                <button onclick="event.stopPropagation(); window.location.href='/delete/{{ type }}/{{ identifier }}';" class="float-right">X</button>
                 <h4 class="card-title">{{ title }}</h4>
                 <p class="card-text">{{ description }}</p>
-                <a href="{{ url }}" target="_blank" style="text-decoration: none; color: inherit;">OPEN </a>
             </div>
         </div>
-{% endmacro %}
+    </a>
+{% endmacro %} -->
 
 
-<h1>Tutorial Page</h1>
+
+{% macro card(title, url, description, type, identifier) -%}
+    <div>
+        <a class="text-decoration-none" href="{{ url }}" style="text-decoration: none;">
+        <div class="card card-small">
+            <div class="card-body">
+                {% if title %}<h4 class="card-title">{{ title }}</h4>{% endif %}
+                <p class="card-text">{{ description }}</p>
+            </div>
+        </div>
+        </a>
+        <button  
+            onclick="event.stopPropagation(); window.location.href='/delete/{{ type }}/{{ identifier }}';" 
+            class="button">
+            Delete
+        </button>
+    </div>
+{%- endmacro %}
+
+
+{% block content %}
+
+<div>
+<div class="jumbotron">
+    <div class="container">
+        <h1>Tutorials</h1>
+    </div>
+</div>
 
 <h1>Upload PDF </h1>
 <form method="post" enctype="multipart/form-data" action="/upload-pdf">
@@ -37,6 +82,30 @@
     <textarea name="link_description" placeholder="Enter a description for the link"></textarea>
     <input type="submit" value="Submit">
 </form>
+</div>
+
+
+<h2>Uploaded PDFs</h2>
+    <div class="">
+        <ul class="card-list">
+            {% for file in files %}
+                {{ card(file.name, file.url, file.description, "pdf", file.name) }}
+            {% endfor %}
+        </ul>
+    </div>
+
+<h2>Submitted Links</h2>
+    <div class="link-section">
+        <ul class="card-list">
+            {% for link in links %}
+                {{ card(link.link, link.link, link.description, "link", loop.index0) }}
+            {% endfor %}
+        </ul>
+    </div>
+
+
+</body>
+</html>
 
 <h2>Uploaded PDFs</h2>
 <div class="pdf-section">
@@ -52,6 +121,9 @@
     {{ tutorial_card(link.link, link.link, link.description, "link", loop.index0) }}
 {% endfor %}
 </div>
+{% endblock %}
+
+
 
 
 </body>
