@@ -1,0 +1,25 @@
+{% macro tutorial_card(title, url, description, is_admin=false) %}
+  <li class="card">
+    <div class="card-body">
+      <h4 class="card-title">{{ title }}</h4>
+      <p class="card-text">{{ description }}</p>
+      <a href="{{ url }}" class="btn btn-primary" target="_blank">Open</a>
+      {% if is_admin %}
+        <button class="btn btn-danger btn-sm delete-button">X</button>
+      {% endif %}
+    </div>
+  </li>
+{% endmacro %}
+
+{% macro upload_card(url, category) %}
+<li class="card upload-card">
+  <div class="card-body">
+    <h4 class="card-title">Upload New {{ category }}</h4>
+    <form action="{{ url }}" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" accept="{{ category == 'Videos' ? 'video/*' : '*' }}" required>
+      <input type="hidden" name="category" value="{{ category }}">
+      <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+  </div>
+</li>
+{% endmacro %}

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and View PDFs and Links</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+{% macro tutorial_card(title, url, description, type, identifier) %}
+    
+        <div class="card">
+            <div class="card-body">
+                <button onclick="event.stopPropagation(); window.location.href='/delete/{{ type }}/{{ identifier }}';" class="btn btn-danger btn-sm float-right">X</button>
+                <h4 class="card-title">{{ title }}</h4>
+                <p class="card-text">{{ description }}</p>
+                <a href="{{ url }}" target="_blank" style="text-decoration: none; color: inherit;">OPEN </a>
+            </div>
+        </div>
+{% endmacro %}
+
+
+<h1>Tutorial Page</h1>
+
+<h1>Upload PDF </h1>
+<form method="post" enctype="multipart/form-data" action="/upload-pdf">
+    <input type="file" name="file" required>
+    <textarea name="pdf_description" placeholder="Enter a description for the PDF"></textarea>
+    <input type="submit" value="Upload">
+</form>
+
+
+<h1>Submit a Link</h1>
+<form method="post" action="/submit-link">
+    <input type="text" name="link" required placeholder="Enter the link">
+    <textarea name="link_description" placeholder="Enter a description for the link"></textarea>
+    <input type="submit" value="Submit">
+</form>
+
+<h2>Uploaded PDFs</h2>
+<div class="pdf-section">
+    {% for file in files %}
+    {{ tutorial_card(file.name, file.url, file.description, "pdf", file.name) }}
+{% endfor %}
+
+</div>
+
+<h2>Submitted Links</h2>
+<div class="link-section">
+    {% for link in links %}
+    {{ tutorial_card(link.link, link.link, link.description, "link", loop.index0) }}
+{% endfor %}
+</div>
+
+
+</body>
+</html>
