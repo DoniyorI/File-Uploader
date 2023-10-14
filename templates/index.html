@@ -8,39 +8,8 @@
 </head>
 <body>
 
-    {% macro tutorial_card(title, url, description, type, identifier) %}
-    <div>
-        
-            <div class="card card-small" >
-                <div class="card-body">
-                    <h4 class="card-title">{{ title }}</h4>
-                    <p class="card-text">{{ description }}</p>
-                    <!-- <a href="{{ url }}" class="btn btn-primary" target="_blank">Open</a>   -->
-                    <button  
-                        onclick="event.stopPropagation(); window.location.href='/delete/{{ type }}/{{ identifier }}';" 
-                        class="">
-                        Delete
-                    </button>
-                </div>
-            </div>
-    </div>
-    {% endmacro %}
 
-    <!-- {% macro card(title, url, description, type, identifier) %}
-    <a href="{{ url }}" target="_blank" style="text-decoration: none; color: inherit;">
-        <div class="card">
-            <div class="card-body">
-                <button onclick="event.stopPropagation(); window.location.href='/delete/{{ type }}/{{ identifier }}';" class="float-right">X</button>
-                <h4 class="card-title">{{ title }}</h4>
-                <p class="card-text">{{ description }}</p>
-            </div>
-        </div>
-    </a>
-{% endmacro %} -->
-
-
-
-{% macro card(title, url, description, type, identifier) -%}
+{% macro tutorial_card(title, url, description, type, identifier) -%}
     <div>
         <a class="text-decoration-none" href="{{ url }}" style="text-decoration: none;">
         <div class="card card-small">
@@ -60,7 +29,6 @@
 
 
 {% block content %}
-
 <div>
 <div class="jumbotron">
     <div class="container">
@@ -89,7 +57,7 @@
     <div class="">
         <ul class="card-list">
             {% for file in files %}
-                {{ card(file.name, file.url, file.description, "pdf", file.name) }}
+                {{ tutorial_card(file.name, file.url, file.description, "pdf", file.name) }}
             {% endfor %}
         </ul>
     </div>
@@ -98,33 +66,9 @@
     <div class="link-section">
         <ul class="card-list">
             {% for link in links %}
-                {{ card(link.link, link.link, link.description, "link", loop.index0) }}
+                {{ tutorial_card(link.link, link.link, link.description, "link", loop.index0) }}
             {% endfor %}
         </ul>
     </div>
 
-
-</body>
-</html>
-
-<h2>Uploaded PDFs</h2>
-<div class="pdf-section">
-    {% for file in files %}
-    {{ tutorial_card(file.name, file.url, file.description, "pdf", file.name) }}
-{% endfor %}
-
-</div>
-
-<h2>Submitted Links</h2>
-<div class="link-section">
-    {% for link in links %}
-    {{ tutorial_card(link.link, link.link, link.description, "link", loop.index0) }}
-{% endfor %}
-</div>
 {% endblock %}
-
-
-
-
-</body>
-</html>
